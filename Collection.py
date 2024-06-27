@@ -13,7 +13,7 @@ def write_to_excel(file_path, data):
     df = pd.DataFrame(data, index=[0])
 
     # Daten in das Blatt schreiben
-    df.to_excel(writer, sheet_name='Sheet1', index=False, header=False, startrow=writer.sheets['Sheet1'].max_row)
+    df.to_excel(writer, sheet_name='Tabelle1', index=False, header=False, startrow=writer.sheets['Tabelle1'].max_row)
 
     # Excel-Datei speichern
     writer.save()
