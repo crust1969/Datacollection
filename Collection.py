@@ -9,6 +9,8 @@ def write_to_excel(file_path, data):
     book = load_workbook(file_path)
     writer = pd.ExcelWriter(file_path, engine='openpyxl')
     writer.book = book
+    writer.close()  # Close the writer after saving
+
 
     # Daten in ein DataFrame konvertieren
     df = pd.DataFrame(data, index=[0])
