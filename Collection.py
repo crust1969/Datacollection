@@ -4,29 +4,32 @@ from openpyxl import load_workbook
 import os
 import tempfile
 
-# Funktion zum Schreiben von Daten in die Excel-Datei
+# Function to write data to the Excel file
 def write_to_excel(file_path, data):
-    # Laden Sie die bestehende Excel-Datei
-    book = load_workbook(file_path)
-    writer = pd.ExcelWriter(file_path, engine='openpyxl')
-    writer.book = book
+    try:
+        # Load the existing Excel file
+        book = load_workbook(file_path)
+        writer = pd.ExcelWriter(file_path, engine='openpyxl')
+        writer.book = book
 
-    # Daten in ein DataFrame konvertieren
-    df = pd.DataFrame(data, index=[0])
+        # Convert data to a DataFrame
+        df = pd.DataFrame(data, index=[0])
 
-    # Daten in das Blatt schreiben
-    df.to_excel(writer, sheet_name='Tabelle1', index=False, header=False, startrow=writer.sheets['Tabelle1'].max_row)
+        # Write data to the sheet
+        df.to_excel(writer, sheet_name='Sheet1', index=False, header=False, startrow=writer.sheets['Sheet1'].max_row)
 
-    # Excel-Datei speichern
-    writer.save()
-    writer.close()  # Close the writer after saving
+        # Save the Excel file
+        writer.save()
+        writer.close()  # Close the writer after saving
+    except Exception as e:
+        st.error(f"Error occurred while writing to Excel: {e}")
 
-# Hauptfunktion der Streamlit-App
+# Main function of the Streamlit app
 def main():
-    st.title("Daten in Excel-Tabelle schreiben")
+    st.title("Write Data to Uploaded Excel File")
 
-    # Dateiupload für die Excel-Datei
-    uploaded_file = st.file_uploader("Wählen Sie eine Excel-Datei aus", type=["xlsx"])
+    # File upload for the Excel file
+    uploaded_file = st.file_uploader("Upload an Excel file", type=["xlsx"])
 
     if uploaded_file:
         # Save the uploaded file to a temporary location
@@ -34,33 +37,33 @@ def main():
         temp_file.write(uploaded_file.read())
         file_path = temp_file.name
 
-        # Anzeigen der hochgeladenen Datei
-        st.write("Hochgeladene Datei:", uploaded_file.name)
+        # Display the uploaded file
+        st.write("Uploaded file:", uploaded_file.name)
 
-        # Dateneingabe für die Excel-Tabelle
+        # Data input for the Excel file
         with st.form("data_form"):
             col1, col2 = st.columns(2)
             with col1:
                 name = st.text_input("Name")
-                age = st.number_input("Alter", min_value=0, max_value=120, step=1)
+                age = st.number_input("Age", min_value=0, max_value=120, step=1)
             with col2:
-                gender = st.selectbox("Geschlecht", ["Männlich", "Weiblich", "Andere"])
-                country = st.text_input("Land")
+                gender = st.selectbox("Gender", ["Male", "Female", "Other"])
+                country = st.text_input("Country")
 
-            submitted = st.form_submit_button("Speichern")
+            submitted = st.form_submit_button("Save")
 
         if submitted:
-            # Daten als Dictionary speichern
+            # Data as a dictionary
             data = {
                 "Name": name,
-                "Alter": age,
-                "Geschlecht": gender,
-                "Land": country
+                "Age": age,
+                "Gender": gender,
+                "Country": country
             }
 
-            # Schreiben der Daten in die Excel-Datei (Übergabe des Dateipfads)
+            # Write data to the Excel file (passing the file path)
             write_to_excel(file_path, data)
-            st.success("Daten wurden erfolgreich gespeichert!")
+            st.success("Data saved successfully!")
 
 if __name__ == "__main__":
     main()
