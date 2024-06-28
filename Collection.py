@@ -14,6 +14,9 @@ if st.button('Save to Excel'):
     # Write user input to Excel
     ws.append([user_input])
 
-    # Save the Excel file
-    wb.save('/Users/carstenrust/Documents/data.xlsx')
-    st.success('Data saved to data.xlsx')
+    # Specify the full path to save the Excel file in the Documents directory
+    file_path = "/Users/carstenrust/Documents/data.xlsx"
+
+    # Save the Excel file to the specified directory
+    wb.save(file_path)
+    st.success(f'Data saved to {file_path}')
