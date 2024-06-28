@@ -29,7 +29,7 @@ def main():
     # Dateiupload für die Excel-Datei
     uploaded_file = st.file_uploader("Wählen Sie eine Excel-Datei aus", type=["xlsx"])
    
-  if uploaded_file:
+    if uploaded_file:
         # Save the uploaded file to a temporary location
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         temp_file.write(uploaded_file.read())
