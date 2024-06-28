@@ -5,7 +5,17 @@ import os
 import tempfile
 
 # Function to write data to the Excel file
+import os
+
+# Function to write data to the Excel file
 def write_to_excel(file_path, data):
+    supported_formats = ['.xlsx', '.xlsm', '.xltx', '.xltm']
+    file_ext = os.path.splitext(file_path)[1]
+
+    if file_ext not in supported_formats:
+        st.error(f"Error: Unsupported file format. Please upload a file with one of the supported formats: {', '.join(supported_formats)}")
+        return
+
     try:
         # Load the existing Excel file
         book = load_workbook(file_path)
