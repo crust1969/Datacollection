@@ -5,6 +5,7 @@ from openpyxl import load_workbook
 # Funktion zum Schreiben von Daten in die Excel-Datei
 def write_to_excel(file_path, data):
     # Laden Sie die bestehende Excel-Datei
+    file_path = '/Users/carstenrust/Documents/Load.xlsx'
     book = load_workbook(file_path)
     writer = pd.ExcelWriter(file_path, engine='openpyxl')
     writer.book = book
