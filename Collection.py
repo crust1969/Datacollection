@@ -1,29 +1,51 @@
-import os
 import streamlit as st
-from openpyxl import Workbook
+import pandas as pd
 
-# Define the file path where you want to save the Excel file
-file_path = "/Users/carstenrust/Documents/data.xlsx"
+# File path to the CSV file
+file_path = '/Users/carstenrust/Documents/data.csv'
 
-# Create the directory if it does not exist
-directory = os.path.dirname(file_path)
-if not os.path.exists(directory):
-    os.makedirs(directory)
+# Function to load data from CSV file
+def load_data(file_path):
+    return pd.read_csv(file_path)
 
-# Create a new Excel workbook
-wb = Workbook()
+# Function to write data to CSV file
+def write_data(file_path, df):
+    df.to_csv(file_path, index=False)
 
-# Create a sample worksheet
-ws = wb.active
-ws.title = "Data"
-ws["A1"] = "Hello"
-ws["B1"] = "World"
+# Load existing data
+df = load_data(file_path)
 
-try:
-    # Attempt to save the workbook to the specified file path
-    wb.save(file_path)
-    st.success(f"Excel file saved successfully at: {file_path}")
-except Exception as e:
-    st.error(f"An error occurred while saving the Excel file: {e}")
+# Streamlit app
+st.title('CSV Data Manager')
 
+# Display existing data
+st.header('Existing Data')
+st.dataframe(df)
 
+# Form to add new data
+st.header('Add New Data')
+with st.form('data_form'):
+    col1, col2 = st.columns(2)
+    with col1:
+        name = st.text_input('Name')
+        age = st.number_input('Age', min_value=0, max_value=120, step=1)
+    with col2:
+        gender = st.selectbox('Gender', ['Male', 'Female', 'Other'])
+        country = st.text_input('Country')
+    
+    submitted = st.form_submit_button('Add Data')
+    
+    if submitted:
+        # Append new data to the DataFrame
+        new_data = {'Name': name, 'Age': age, 'Gender': gender, 'Country': country}
+        df = df.append(new_data, ignore_index=True)
+        
+        # Write the updated DataFrame back to the CSV file
+        write_data(file_path, df)
+        
+        st.success('Data added successfully!')
+        st.dataframe(df)  # Display updated data
+
+if __name__ == "__main__":
+    st.set_page_config(page_title='CSV Data Manager', layout='wide')
+    main()
