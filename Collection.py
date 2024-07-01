@@ -1,22 +1,25 @@
+import streamlit as st
 import os
 import pandas as pd
-import streamlit as st
 
-# Streamlit app
-st.title('CSV Data Loader and Viewer')
+st.title("Lokales Verzeichnis durchsuchen")
 
-# File uploader widget
-uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+# Pfad zum lokalen Verzeichnis
+directory_path = st.text_input("Geben Sie den Pfad zum Verzeichnis ein:", "/Users/deinbenutzername/Documents")
 
-if uploaded_file is not None:
-    # Load the data
-    data_frame = pd.read_csv(uploaded_file)
+if os.path.exists(directory_path):
+    files = os.listdir(directory_path)
+    st.write(f"Dateien im Verzeichnis '{directory_path}':")
+    st.write(files)
     
-    # Display the DataFrame
-    st.header('Loaded Data')
-    st.dataframe(data_frame)
+    selected_file = st.selectbox("Wählen Sie eine Datei aus:", files)
+    
+    if selected_file:
+        file_path = os.path.join(directory_path, selected_file)
+        if selected_file.endswith('.csv'):
+            df = pd.read_csv(file_path)
+            st.write(df)
+        else:
+            st.write(f"Der Dateityp von '{selected_file}' wird nicht unterstützt.")
 else:
-    st.info("Please upload a CSV file.")
-
-if __name__ == "__main__":
-    st.set_page_config(page_title='CSV Data Loader', layout='wide')
+    st.error("Das angegebene Verzeichnis existiert nicht.")
