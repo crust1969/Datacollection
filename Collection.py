@@ -5,7 +5,7 @@ import pandas as pd
 st.title("Lokales Verzeichnis durchsuchen")
 
 # Pfad zum lokalen Verzeichnis
-directory_path = st.text_input("Geben Sie den Pfad zum Verzeichnis ein:", "/Users/carstenrust/Documents")
+directory_path = st.text_input("Geben Sie den Pfad zum Verzeichnis ein:", "/Users/carstenrust/Documents/")
 
 if os.path.exists(directory_path):
     files = os.listdir(directory_path)
