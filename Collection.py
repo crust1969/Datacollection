@@ -1,15 +1,23 @@
+
+Code kopieren
 import streamlit as st
 import pandas as pd
+import os
 
 # File path to the CSV file
 file_path = '/Users/carstenrust/Documents/data.csv'
 
 # Function to load data from CSV file
 def load_data(file_path):
-    return pd.read_csv(file_path)
+    if os.path.exists(file_path):
+        return pd.read_csv(file_path)
+    else:
+        return pd.DataFrame(columns=['Name', 'Age', 'Gender', 'Country'])
 
 # Function to write data to CSV file
 def write_data(file_path, df):
+    # Ensure the directory exists
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
     df.to_csv(file_path, index=False)
 
 # Load existing data
